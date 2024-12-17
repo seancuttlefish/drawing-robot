@@ -1,46 +1,4 @@
-radio.onReceivedNumber(function (receivedNumber) {
-    if (receivedNumber == 1) {
-        basic.showLeds(`
-            . . . # .
-            . . # . .
-            . # . . .
-            . . # . .
-            . . . # .
-            `)
-        minibit.rotatems(mbRobotDirection.Left, 20, time)
-        basic.clearScreen()
-    } else if (receivedNumber == 2) {
-        basic.showLeds(`
-            . # . . .
-            . . # . .
-            . . . # .
-            . . # . .
-            . # . . .
-            `)
-        minibit.rotatems(mbRobotDirection.Right, 20, time)
-        basic.clearScreen()
-    } else if (receivedNumber == 3) {
-        basic.showLeds(`
-            . . . . .
-            . . # . .
-            . # . # .
-            # . . . #
-            . . . . .
-            `)
-        minibit.goms(mbDirection.Forward, 20, 1500)
-        basic.clearScreen()
-    } else if (receivedNumber == 4) {
-        basic.showLeds(`
-            . . . . .
-            # . . . #
-            . # . # .
-            . . # . .
-            . . . . .
-            `)
-        minibit.goms(mbDirection.Reverse, 20, 1500)
-    }
-})
-input.onButtonPressed(Button.A, function () {
+function Left (duration: number) {
     basic.showLeds(`
         . . . # .
         . . # . .
@@ -48,11 +6,19 @@ input.onButtonPressed(Button.A, function () {
         . . # . .
         . . . # .
         `)
-    radio.sendNumber(1)
-    basic.pause(time)
+    minibit.rotatems(mbRobotDirection.Left, 20, duration)
     basic.showNumber(ID)
+}
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 1) {
+        Left(timeunit)
+    } else if (receivedNumber == 2) {
+        Right(timeunit)
+    } else if (receivedNumber == 3) {
+        Forward(timeunit)
+    }
 })
-input.onButtonPressed(Button.AB, function () {
+function Forward (duration: number) {
     basic.showLeds(`
         . . . . .
         . . # . .
@@ -60,11 +26,22 @@ input.onButtonPressed(Button.AB, function () {
         # . . . #
         . . . . .
         `)
-    radio.sendNumber(3)
-    basic.pause(time)
+    minibit.goms(mbDirection.Forward, 20, duration)
     basic.showNumber(ID)
+}
+input.onButtonPressed(Button.A, function () {
+    radio.sendNumber(1)
+    Right(1)
+})
+input.onButtonPressed(Button.AB, function () {
+    radio.sendNumber(3)
+    Forward(1)
 })
 input.onButtonPressed(Button.B, function () {
+    radio.sendNumber(2)
+    Left(1)
+})
+function Right (duration: number) {
     basic.showLeds(`
         . # . . .
         . . # . .
@@ -72,14 +49,13 @@ input.onButtonPressed(Button.B, function () {
         . . # . .
         . # . . .
         `)
-    radio.sendNumber(2)
-    basic.pause(time)
+    minibit.rotatems(mbRobotDirection.Right, 20, duration)
     basic.showNumber(ID)
-})
-let time = 0
+}
+let timeunit = 0
 let ID = 0
 ID = 1
-time = 375
+timeunit = 375
 radio.setGroup(ID)
 basic.showNumber(ID)
 basic.forever(function () {
