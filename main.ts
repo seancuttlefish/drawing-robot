@@ -40,10 +40,10 @@ function Backward (distance: number) {
     minibit.goms(mbDirection.Reverse, 20, distance)
     basic.showNumber(ID)
 }
-let ID = 0
 let status = 0
-status = 1
+let ID = 0
 ID = 1
+status = 1
 radio.setGroup(ID)
 basic.showNumber(ID)
 basic.forever(function () {
