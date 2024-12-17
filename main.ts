@@ -1,44 +1,54 @@
-function Left (duration: number) {
-    basic.showLeds(`
-        . . . # .
-        . . # . .
-        . # . . .
-        . . # . .
-        . . . # .
-        `)
-    minibit.rotatems(mbRobotDirection.Left, 20, duration)
+function Left (degrees: number) {
+    basic.showArrow(ArrowNames.West)
+    minibit.rotatems(mbRobotDirection.Left, 20, degrees)
     basic.showNumber(ID)
 }
-function Forward (duration: number) {
-    basic.showLeds(`
-        . . . . .
-        . . # . .
-        . # . # .
-        # . . . #
-        . . . . .
-        `)
-    minibit.goms(mbDirection.Forward, 20, duration)
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 1) {
+        Left(300)
+    } else if (receivedNumber == 2) {
+        Right(300)
+    } else if (receivedNumber == 3) {
+        Forward(300)
+    }
+})
+function Forward (distance: number) {
+    basic.showArrow(ArrowNames.North)
+    minibit.goms(mbDirection.Forward, 20, distance)
     basic.showNumber(ID)
 }
-function Right (duration: number) {
-    basic.showLeds(`
-        . # . . .
-        . . # . .
-        . . . # .
-        . . # . .
-        . # . . .
-        `)
-    minibit.rotatems(mbRobotDirection.Right, 20, duration)
+input.onButtonPressed(Button.A, function () {
+    radio.sendNumber(1)
+})
+input.onButtonPressed(Button.AB, function () {
+    radio.sendNumber(3)
+})
+input.onButtonPressed(Button.B, function () {
+    radio.sendNumber(2)
+})
+function Right (degrees: number) {
+    basic.showArrow(ArrowNames.East)
+    minibit.rotatems(mbRobotDirection.Right, 20, degrees)
+    basic.showNumber(ID)
+}
+function Stop () {
+    minibit.stop(mbStopMode.Brake)
+    status = 0
+}
+function Backward (distance: number) {
+    basic.showArrow(ArrowNames.South)
+    minibit.goms(mbDirection.Reverse, 20, distance)
     basic.showNumber(ID)
 }
 let ID = 0
+let status = 0
+status = 1
 ID = 1
-let timeunit = 375
 radio.setGroup(ID)
 basic.showNumber(ID)
 basic.forever(function () {
     Left(300)
-    Forward(3000)
-    Right(600)
-    Forward(3000)
+    Forward(300)
+    Right(300)
+    Backward(300)
 })
