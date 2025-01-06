@@ -28,7 +28,6 @@ function Right (degrees: number) {
 }
 function Stop () {
     minibit.stop(mbStopMode.Brake)
-    busy = 0
     basic.showNumber(ID)
 }
 function Backward (distance: number) {
@@ -37,10 +36,8 @@ function Backward (distance: number) {
     basic.showNumber(ID)
 }
 let speed = 0
-let busy = 0
 let ID = 0
 ID = 1
-busy = 0
 radio.setGroup(ID)
 speed = 70
 basic.showNumber(ID)
