@@ -15,7 +15,7 @@ radio.onReceivedNumber(function (receivedNumber) {
     } else if (receivedNumber == 5) {
         Spin()
     } else if (receivedNumber == 6) {
-        Stop()
+        Stop(10000)
     }
 })
 function Forward (distance: number) {
@@ -40,9 +40,16 @@ function Right (degrees: number) {
     minibit.rotatems(mbRobotDirection.Right, speed, degrees)
     basic.showNumber(ID)
 }
-function Stop () {
-    minibit.stop(mbStopMode.Brake)
-    basic.showNumber(ID)
+function Stop (duration: number) {
+    basic.showLeds(`
+        # # . # #
+        . . . . .
+        . . # . .
+        . . . . .
+        # # # # #
+        `)
+    minibit.stop(mbStopMode.Coast)
+    basic.pause(randint(0, 6) * duration)
 }
 function Backward (distance: number) {
     basic.showArrow(ArrowNames.South)
@@ -57,10 +64,8 @@ let ID = 0
 ID = 1
 radio.setGroup(ID)
 speed = randint(30, 80)
-basic.showNumber(ID)
 basic.forever(function () {
     distance = minibit.sonar(mbPingUnit.Centimeters)
-    basic.showNumber(distance)
     if (distance > 0 && distance < 160 && distance < 10) {
         if (Math.randomBoolean()) {
             minibit.setLedColor(0xff0000)
@@ -79,5 +84,8 @@ basic.forever(function () {
         minibit.setLedColor(0xFFFF00)
         Spin()
         counter = 0
+        minibit.ledClear()
+        Stop(10000)
+        music.play(music.createSoundExpression(WaveShape.Square, 5000, 1, 255, 0, 979, SoundExpressionEffect.Vibrato, InterpolationCurve.Logarithmic), music.PlaybackMode.UntilDone)
     }
 })
